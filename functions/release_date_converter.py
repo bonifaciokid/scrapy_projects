@@ -30,6 +30,8 @@ class ReleaseDateConverter:
 				if season == 'mid':
 					return 'jun'
 				return 'dec'
+		return 'dec'
+		
 
 	def month_release(self, raw_date):
 		"""
@@ -59,6 +61,7 @@ class ReleaseDateConverter:
 			return 'dec'
 		return self.season_released(lower_date)
 
+
 	def year_release(self, raw_date):
 		"""
 			Return year released if any or return current year.
@@ -75,7 +78,8 @@ class ReleaseDateConverter:
 					return str(year)
 		return str(year_now)
 
-	def release_date(self, raw_date, month, quarter_check, year):
+
+	def find_release_date(self, raw_date, month, quarter_check, year):
 		"""
 			Return last date of the month based on month and quarter object.
 			NOTE: Function only be used if date doesn't fit the date format.
@@ -96,6 +100,7 @@ class ReleaseDateConverter:
 			return '31'
 		return '30'
 
+
 	def quarter_release(self, raw_date):
 		"""
 			Return last date of the month based on month and quarter object.
@@ -108,6 +113,7 @@ class ReleaseDateConverter:
 				return 1
 		return 0
 
+
 	def clean_release_date(self, raw_date):
 		"""
 			Return cleaned released date by removing not needed string for formatting.
@@ -119,12 +125,12 @@ class ReleaseDateConverter:
 			if string in raw_date:
 				raw_date = raw_date.replace(string, '')
 
-		return raw_date.capitalize()
+		return raw_date.capitalize().encode('ascii', 'ignore')
+
 
 	def format_date(self, coming_soon, raw_date, status, tba):
 		"""
-			Return converted date (ex.2020-12-31).
-			NOTE: Function only be used if date doesn't fit the date format.
+			Return converted date (format: 2020-12-31).
 		"""
 		cleaned_date = self.clean_release_date(raw_date)
 		if tba == 0:
@@ -139,7 +145,7 @@ class ReleaseDateConverter:
 		year = self.year_release(cleaned_date)
 		check_quarter = self.quarter_release(cleaned_date)
 		month = self.month_release(cleaned_date)
-		rdate = self.release_date(cleaned_date, month, check_quarter, year)
+		rdate = self.find_release_date(cleaned_date, month, check_quarter, year)
 		added_date_data = month + ' ' + rdate + ' ' + year
 		release_date = datetime.strptime(added_date_data, '%b %d %Y').date()
 

@@ -8,12 +8,22 @@ def game_genre_category(game_data):
 		Return:
 			All game genres and categories.
 	"""
-	game_themes = game_data['genres'] + game_data['categories']
-	get_themes = [theme['description'] for theme in game_themes]
-	join_themes = ', '.join(get_themes)
+	try:
+		genres = game_data['genres']
+	except KeyError:
+		genres = []
 
-	return join_themes 
+	try:
+		categories = game_data['categories']
+	except KeyError:
+		categories = []
 
+	game_themes = genres + categories
+	if len(game_themes) > 0:
+		get_themes = [theme['description'] for theme in game_themes]
+		join_themes = ', '.join(get_themes)
+		return join_themes
+	return ''
 
 def steam_minimum_requirements(raw_requirement):
 	"""
@@ -83,9 +93,3 @@ def game_file_size(raw_requirement):
 					space = float('.'.join(required_space))
 					return space * 1
 	return 0
-
-
-# raw_req = """<strong>Recommended:</strong><br><ul class="bb_ul"><li><strong>OS:</strong> Windows® 8.1 / 10 64-bit<br></li><li><strong>Processor:</strong> AMD Ryzen™ 3 1200 / Intel® Core™ i5 2.5GHz<br></li><li><strong>Memory:</strong> 8 GB RAM<br></li><li><strong>Graphics:</strong> AMD Radeon™ RX 470 / NVIDIA® GeForce® GTX 1050 Ti<br></li><li><strong>DirectX:</strong> Version 11<br></li><li><strong>Storage:</strong> 20 GB available space<br></li><li><strong>Additional Notes:</strong> 60 FPS @ 1920x1080</li></ul>"""
-
-# size = game_file_size(raw_req)
-# print (size)
