@@ -1,4 +1,4 @@
-import re
+"""functions used for scrapers"""
 
 def game_status(raw_data):
 	""" check if game is early access or not """
