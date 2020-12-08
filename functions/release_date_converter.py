@@ -29,7 +29,6 @@ class ReleaseDateConverter:
 					return 'may'
 				if season == 'mid':
 					return 'jun'
-				return 'dec'
 		return 'dec'
 		
 
@@ -44,13 +43,13 @@ class ReleaseDateConverter:
 			if month in lower_date:
 				return month
 
-		first = ['jan', 'feb', 'mar', 'q1', 'quarter 1', 'quarter1', '1q']
-		second = ['apr', 'may', 'jun', 'q2', 'quarter 2', 'quarter2', '2q']
-		third = ['jul', 'aug', 'sep', 'q3', 'quarter 3', 'quarter3', '3q']
-		fourth = ['oct', 'nov', 'dec', 'q4', 'quarter 4', 'quarter4', '4q']
+		first = ['jan', 'feb', 'mar', 'q1', 'quarter 1', 'quarter1', '1q', 'first quarter']
+		second = ['apr', 'may', 'jun', 'q2', 'quarter 2', 'quarter2', '2q', 'second quarter']
+		third = ['jul', 'aug', 'sep', 'q3', 'quarter 3', 'quarter3', '3q', 'third quarter']
+		fourth = ['oct', 'nov', 'dec', 'q4', 'quarter 4', 'quarter4', '4q', 'fourth quarter']
 		add_quarters = first + second + third + fourth
 		month = [month for month in add_quarters if month in lower_date]
-		if len(month) > 0:
+		if month:
 			raw_month = month[0]
 			if raw_month in first:
 				return 'mar'
@@ -72,7 +71,7 @@ class ReleaseDateConverter:
 		now = datetime.now()
 		year_now = now.year
 
-		if len(find_year) > 0:
+		if find_year:
 			for year in find_year:
 				if len(str(year)) == 4:
 					return str(year)
@@ -87,7 +86,7 @@ class ReleaseDateConverter:
 		lower_raw_date = raw_date.lower()
 		month_31 = ['jan', 'mar', 'may', 'jul', 'aug', 'oct', 'dec']
 		find_date = re.findall(r'\d+', lower_raw_date)
-		if len(find_date) > 0:
+		if find_date:
 			if quarter_check == 0:
 				for rdate in find_date:
 					if int(rdate) <= 31:
@@ -125,7 +124,7 @@ class ReleaseDateConverter:
 			if string in raw_date:
 				raw_date = raw_date.replace(string, '')
 
-		return raw_date.capitalize().encode('ascii', 'ignore')
+		return str(raw_date.capitalize().encode('ascii', 'ignore'))
 
 
 	def format_date(self, coming_soon, raw_date, status, tba):
@@ -134,13 +133,24 @@ class ReleaseDateConverter:
 		"""
 		cleaned_date = self.clean_release_date(raw_date)
 		if tba == 0:
-			try:
-				release_date = datetime.strptime(cleaned_date, '%B %d %Y').date()
-				return release_date
+			
+				try:
+					release_date = datetime.strptime(cleaned_date, '%b %d %Y')
+					return release_date
+				except ValueError as ve:
+					print (ve)
 
-			except ValueError:
-				release_date = datetime.strptime(cleaned_date, '%b %d %Y').date()
-				return release_date
+				try:
+					release_date = datetime.strptime(cleaned_date, '%B %d %Y')
+					return release_date
+				except ValueError as ve:
+					print (ve) 
+
+				try:
+					release_date = datetime.strptime(raw_date, '%m/%d/%Y')
+					return release_date
+				except ValueError as ve:
+					print (ve)
 
 		year = self.year_release(cleaned_date)
 		check_quarter = self.quarter_release(cleaned_date)

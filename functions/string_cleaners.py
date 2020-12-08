@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import re
 
+
 def soup_text(text):
 	"""
 		Args:
@@ -28,7 +29,7 @@ def remove_non_strings(text):
 	"""
 	words = []
 	for string in text:
-		if string != '':
+		if not string:
 			word = string.replace('\n', '').replace('\t', '').replace('\r', '')
 			words.append(word)
 

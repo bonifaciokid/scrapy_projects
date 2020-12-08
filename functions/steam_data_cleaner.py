@@ -19,7 +19,7 @@ def game_genre_category(game_data):
 		categories = []
 
 	game_themes = genres + categories
-	if len(game_themes) > 0:
+	if game_themes:
 		get_themes = [theme['description'] for theme in game_themes]
 		join_themes = ', '.join(get_themes)
 		return join_themes
@@ -32,9 +32,9 @@ def steam_minimum_requirements(raw_requirement):
 	try:
 		raw_min = raw_requirement.replace('\n', '').replace('\t', '')
 		find_min = re.findall("OS:(.*?)</ul>", raw_min)
-		if len(find_min) == 0:
+		if not find_min:
 			find_min = re.findall("OS(.*?)</ul>", raw_min)
-			if len(find_min) == 0:
+			if not find_min:
 				find_min = re.findall(':</strong>(.*?)</ul>', raw_min + '</ul>')
 		requirements = '<ul><li><strong>OS:' + find_min[0] + "</ul>"
 
@@ -56,9 +56,9 @@ def steam_max_requirements(raw_requirement):
 	try:
 		raw_max = raw_requirement.replace('\n', '').replace('\t', '') + '</ul>'
 		find_max = re.findall("OS:(.*?)</ul>", raw_max)
-		if len(find_max) == 0:
+		if not find_max:
 			find_max = re.findall("OS(.*?)</ul>", raw_max)
-			if len(find_max) == 0:
+			if not find_max:
 				find_max = re.findall(':</strong>(.*?)</ul>', raw_max + '</ul>')
 		max_req = '<ul><li><strong>OS:' + find_max[0] + "</ul>"
 
