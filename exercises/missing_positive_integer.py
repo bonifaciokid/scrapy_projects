@@ -8,32 +8,34 @@ Hi, here's your problem today. This problem was recently asked by Facebook:
 	Your solution should run in linear time and use constant space.
 """
 
-
 from datetime import datetime
 import random
-
 
 def first_missing_positive(nums):
 	"""
 		Add 1 from the smallest number in array add return if it doesn't exists
 	"""
-
-	nums.sort()
+	max_num = max(nums)
+	min_num = min(nums)
+	lowest = 0
 	for n in nums:
-		if n+1 not in nums and n > 0:
-			return n+1
-
+		if n > 1:
+			current_lowest = n-1
+			if lowest == 0:
+				lowest = current_lowest
+			else:
+				if current_lowest < max_num and current_lowest > min_num and current_lowest not in nums:
+					if current_lowest < lowest:
+						lowest = current_lowest
+	return lowest
 
 nums = [3, 4, -1, 1]
 start = datetime.now()
 missing = first_missing_positive(nums)
 end = datetime.now()
 run_time = end - start
-print ('smallest missing positive integer is', missing)
+print ('smallest missing positive integer is ', missing)
 print ('run time =', run_time)
-
-
-
 
 
 
