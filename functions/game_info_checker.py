@@ -1,11 +1,13 @@
 """functions used for scrapers"""
 
 def game_status(raw_data):
-	""" check if game is early access or not """
-	data = ', '.join(raw_data).lower()
-	if 'early access' in data:
+	""" 
+		Check if game is early access or not.
+		raw_data type must be string.
+	"""
+	if 'early access' in raw_data.lower():
 		return 5
-	if 'canceled' in data:
+	if 'canceled' in raw_data.lower():
 		return 3
 	return 1
 
