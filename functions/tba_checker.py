@@ -24,7 +24,7 @@ def clean_release_date(raw_date):
 def is_tba(raw_release_date):
 	"""
 		Return:
-			0: passed date formatting
+			0: pass date formatting
 			1: if can't convert date format
 	"""
 	cleaned_date = clean_release_date(raw_release_date)
@@ -42,7 +42,7 @@ def is_tba(raw_release_date):
 			print (ve)
 
 		try:
-			date = datetime.strptime(raw_date, '%m/%d/%Y')
+			datetime.strptime(raw_release_date, '%m/%d/%Y')
 			return 0
 		except ValueError as ve:
 			print (ve)
