@@ -10,7 +10,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 class TwitchTopStreamedGames:
 	"""
-		This code only for twitch currently top streamed games by streamers. Twitch's API will return top streams (min, 20, max=100) based in currently viewer count. 
+		This code is only for twitch currently top streamed games. Twitch's API will return top streams (min, 20, max=100) based in current viewer count. 
 		See docs at https://dev.twitch.tv/docs/api.
 
 	"""
@@ -47,7 +47,8 @@ class TwitchTopStreamedGames:
 		data = response_json['data']
 		game_list = [game['game_name'] for game in data]
 		game_names = list(set(game_list))
-		print_response = json.dumps(response_json, indent=self.INDENT)
+		print (game_names)
+		# print_response = json.dumps(response_json, indent=self.INDENT)
 
 		return data
 	
@@ -75,11 +76,11 @@ class TwitchTopStreamedGames:
 		return final_data
 
 
-	def file_to_csv(self, data):
+	def file_to_csv(self, data, time_stamp):
 		"""
 			returns file name that will be used to create csv file to be uploaded to s3 bucket
 		"""
-		file_name = '{}.csv'.format(timestamp)
+		file_name = '{}.csv'.format(time_stamp)
 		columns = ['game_id', 'game_name', 'viewer_count', 'streamer_count', 'timestamp']
 		with open('csv/' + file_name,'w') as w:
 			writer=csv.writer(w)
@@ -125,11 +126,10 @@ if __name__ == "__main__":
 	if response_data:
 		ts = twitch.time_stamp()
 		sorted_streams = twitch.sort_top_streams(response_data, ts)
-		to_gs = twitch.to_google_sheet(sorted_streams)
-		to_csv = twitch.file_to_csv(sort_streams)
-		upload = twitch.upload_to_s3(to_csv)
+		to_csv = twitch.file_to_csv(sorted_streams, ts)
+		twitch.append_to_gsheet(sorted_streams)
+		twitch.upload_to_s3(to_csv)
 	else:
 		print ('No scraped data...')
 
 	print ('Done...')
-
