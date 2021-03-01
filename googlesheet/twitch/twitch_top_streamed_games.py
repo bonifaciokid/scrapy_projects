@@ -41,7 +41,7 @@ class TwitchTopStreamedGames:
 		"""
 			return top 100 streamed videos by viewer count
 		"""
-		url  = self.BASE_URL + self.QUERY
+		url = self.BASE_URL + self.QUERY
 		response = requests.get(url, headers=self.HEADERS)
 		response_json = response.json()
 		data = response_json['data']
@@ -81,6 +81,7 @@ class TwitchTopStreamedGames:
 			returns file name that will be used to create csv file to be uploaded to s3 bucket
 		"""
 		file_name = '{}.csv'.format(time_stamp)
+		print ("saving file to csv, " + file_name)
 		columns = ['game_id', 'game_name', 'viewer_count', 'streamer_count', 'timestamp']
 		with open('csv/' + file_name,'w') as w:
 			writer=csv.writer(w)
