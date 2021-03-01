@@ -97,7 +97,6 @@ class TwitchTopStreamedGames:
 			upload csv file to s3 Bucket
 		"""
 		directory = 'csv/' + file_name
-		print (file_name)
 		print ('uploading file to s3 bucket ' , self.BUCKET_NAME)
 		s3 = boto3.resource(
 								's3',
